@@ -13,9 +13,7 @@ export const Autocomplete: React.FC<Props> = ({
   onSelected,
 }) => {
   const [query, setQuery] = useState<string>('');
-
   const [debouncedQuery, setDebouncedQuery] = useState<string>('');
-
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,10 +42,8 @@ export const Autocomplete: React.FC<Props> = ({
     );
   }, [people, normalizedQuery, isFocused]);
 
-  const isDropdownActive = isFocused;
-
   const showNoSuggestions =
-    isFocused && normalizedQuery && suggestions.length === 0;
+    isFocused && normalizedQuery.length > 0 && suggestions.length === 0;
 
   const handleChange = (value: string) => {
     if (value === query) {
@@ -60,12 +56,13 @@ export const Autocomplete: React.FC<Props> = ({
 
   const handleSelect = (person: Person) => {
     setQuery(person.name);
+    setDebouncedQuery(person.name);
     onSelected(person);
     setIsFocused(false);
   };
 
   return (
-    <div className={`dropdown ${isDropdownActive ? 'is-active' : ''}`}>
+    <div className={`dropdown ${isFocused ? 'is-active' : ''}`}>
       <div className="dropdown-trigger">
         <input
           type="text"
@@ -74,17 +71,14 @@ export const Autocomplete: React.FC<Props> = ({
           data-cy="search-input"
           value={query}
           onChange={event => handleChange(event.target.value)}
-          onFocus={() => {
-            setIsFocused(true);
-            setQuery('');
-          }}
+          onFocus={() => setIsFocused(true)}
           onBlur={() => {
             setTimeout(() => setIsFocused(false), 100);
           }}
         />
       </div>
 
-      {isDropdownActive && suggestions.length > 0 && (
+      {isFocused && suggestions.length > 0 && (
         <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
           <div className="dropdown-content">
             {suggestions.map(person => (
@@ -119,7 +113,7 @@ export const Autocomplete: React.FC<Props> = ({
           role="alert"
           data-cy="no-suggestions-message"
         >
-          <p className="has-text-danger"> No matching suggestions </p>
+          <p className="has-text-danger">No matching suggestions</p>
         </div>
       )}
     </div>
