@@ -35,14 +35,14 @@ export const Autocomplete: React.FC<Props> = ({
       return [];
     }
 
-    if (!normalizedQuery || debouncedQuery === query) {
+    if (!normalizedQuery) {
       return people;
     }
 
     return people.filter(person =>
       person.name.toLowerCase().includes(normalizedQuery),
     );
-  }, [people, normalizedQuery, isFocused, debouncedQuery, query]);
+  }, [people, normalizedQuery, isFocused]);
 
   const isDropdownActive = isFocused;
 
@@ -74,7 +74,10 @@ export const Autocomplete: React.FC<Props> = ({
           data-cy="search-input"
           value={query}
           onChange={event => handleChange(event.target.value)}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            setQuery('');
+          }}
           onBlur={() => {
             setTimeout(() => setIsFocused(false), 100);
           }}
