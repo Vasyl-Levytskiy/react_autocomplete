@@ -12,9 +12,9 @@ export const Autocomplete: React.FC<Props> = ({
   delay = 300,
   onSelected,
 }) => {
-  const [query, setQuery] = useState<string>('');
-  const [debouncedQuery, setDebouncedQuery] = useState<string>('');
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
