@@ -13,13 +13,10 @@ export const Autocomplete: React.FC<Props> = ({
   onSelected,
 }) => {
   const [query, setQuery] = useState<string>('');
-  // текст в input
 
   const [debouncedQuery, setDebouncedQuery] = useState<string>('');
-  // текст після debounce
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  // чи у фокусі input
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,14 +35,14 @@ export const Autocomplete: React.FC<Props> = ({
       return [];
     }
 
-    if (!normalizedQuery) {
+    if (!normalizedQuery || debouncedQuery === query) {
       return people;
     }
 
     return people.filter(person =>
       person.name.toLowerCase().includes(normalizedQuery),
     );
-  }, [people, normalizedQuery, isFocused]);
+  }, [people, normalizedQuery, isFocused, debouncedQuery, query]);
 
   const isDropdownActive = isFocused;
 
@@ -69,7 +66,6 @@ export const Autocomplete: React.FC<Props> = ({
 
   return (
     <div className={`dropdown ${isDropdownActive ? 'is-active' : ''}`}>
-      {/* INPUT */}
       <div className="dropdown-trigger">
         <input
           type="text"
@@ -85,7 +81,6 @@ export const Autocomplete: React.FC<Props> = ({
         />
       </div>
 
-      {/* SUGGESTIONS */}
       {isDropdownActive && suggestions.length > 0 && (
         <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
           <div className="dropdown-content">
@@ -109,7 +104,6 @@ export const Autocomplete: React.FC<Props> = ({
         </div>
       )}
 
-      {/* NO RESULTS */}
       {showNoSuggestions && (
         <div
           className="

@@ -5,7 +5,6 @@ import { Person } from './types/Person';
 import { Autocomplete } from './components/Autocomplete/Autocomplete';
 
 export const App: React.FC = () => {
-  // 🔹 зберігаємо вибрану людину
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
 
   return (
@@ -18,7 +17,6 @@ export const App: React.FC = () => {
             : 'No selected person'}
         </h1>
 
-        {/* 🔹 Автозаповнення */}
         <Autocomplete
           people={peopleFromServer}
           delay={300}
